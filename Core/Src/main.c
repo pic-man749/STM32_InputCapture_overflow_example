@@ -247,7 +247,7 @@ static void MX_USART2_UART_Init(void)
 
   /* USER CODE END USART2_Init 1 */
   huart2.Instance = USART2;
-  huart2.Init.BaudRate = 115200;
+  huart2.Init.BaudRate = 9600;
   huart2.Init.WordLength = UART_WORDLENGTH_8B;
   huart2.Init.StopBits = UART_STOPBITS_1;
   huart2.Init.Parity = UART_PARITY_NONE;
@@ -279,6 +279,9 @@ static void MX_DMA_Init(void)
   /* DMA1_Channel6_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA1_Channel6_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(DMA1_Channel6_IRQn);
+  /* DMA1_Channel7_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Channel7_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Channel7_IRQn);
 
 }
 
@@ -328,7 +331,7 @@ void setLed(uint8_t v){
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, ps);
 }
 
-// タイマ�?�がオーバ�?�フローすると呼ばれる関数
+// タイマーがオーバーフローすると呼ばれる関数
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
   if (htim == &htim3){
@@ -336,7 +339,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
   }
 }
 
-// DMAバッファがいっぱ�?になると呼ばれる関数
+// DMAバッファが一杯になると呼ばれる関数
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 {
   if (htim == &htim3){
@@ -346,7 +349,7 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
     }
     sputs("\r\n");
 
-    uint32_t total = (overflowValue*0xffff ) + timValues[DMA_ARRAY_SIZE - 1];
+    uint32_t total = (overflowValue*0x10000 ) + timValues[DMA_ARRAY_SIZE - 1];
     sputsf("overFlow = %d, total = %d\r\n", overflowValue, total);
 
     procFlag = 0;
