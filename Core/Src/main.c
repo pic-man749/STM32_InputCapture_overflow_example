@@ -132,7 +132,7 @@ int main(void)
     HAL_TIM_IC_Stop_DMA(&htim3, TIM_CHANNEL_1);
     HAL_TIM_Base_Stop_IT(&htim3);
 
-    __HAL_TIM_SetCounter(TIM3, 0);
+    __HAL_TIM_SetCounter(&htim3, 0);
 
     HAL_Delay(1000);
     sputsln("End.");
